@@ -8,7 +8,7 @@ interface FilterYaml {
 }
 type FilterItemYaml =
   | string // Filename pattern, e.g. "path/to/*.js"
-  | { [changeTypes: string]: string | string[] }; // Change status and filename, e.g. added|modified: "path/to/*.js"
+  | { [changeTypes: string]: string | string[] } // Change status and filename, e.g. added|modified: "path/to/*.js"
   | FilterItemYaml[]; // Supports referencing another rule via YAML anchor
 
 // Minimatch options used in all matchers
