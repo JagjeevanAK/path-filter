@@ -58,7 +58,7 @@ const jsyaml = __importStar(__nccwpck_require__(1917));
 const picomatch_1 = __importDefault(__nccwpck_require__(8569));
 // Minimatch options used in all matchers
 const MatchOptions = {
-    dot: true
+    dot: true,
 };
 /**
  * Enumerates the possible logic quantifiers that can be used when determining
@@ -71,7 +71,7 @@ const MatchOptions = {
  * The default is to use 'some' which used to be the hardcoded behavior prior to
  * the introduction of the new mechanism.
  *
- * @see https://en.wikipedia.org/wiki/Quantifier_(logic)
+ * @see https://en.wikipedia.org/wiki/Quantifier_(logic).
  */
 var PredicateQuantifier;
 (function (PredicateQuantifier) {
@@ -130,11 +130,24 @@ class Filter {
         const aPredicate = (rule) => {
             return (rule.status === undefined || rule.status.includes(file.status)) && rule.isMatch(file.filename);
         };
-        if (((_a = this.filterConfig) === null || _a === void 0 ? void 0 : _a.predicateQuantifier) === 'every') {
+        if (((_a = this.filterConfig) === null || _a === void 0 ? void 0 : _a.predicateQuantifier) === PredicateQuantifier.EVERY) {
             return patterns.every(aPredicate);
         }
         else {
-            return patterns.some(aPredicate);
+            // Corrected logic: Check if *any* pattern matches, but *no* exclusion patterns match.
+            let matched = false;
+            let excluded = false;
+            for (const pattern of patterns) {
+                if (pattern.isMatch(file.filename) && (pattern.status === undefined || pattern.status.includes(file.status))) {
+                    if (String(pattern.isMatch).startsWith('!')) {
+                        excluded = true;
+                    }
+                    else {
+                        matched = true;
+                    }
+                }
+            }
+            return matched && !excluded;
         }
     }
     parseFilterItemYaml(item) {
@@ -155,7 +168,7 @@ class Filter {
                         .map(x => x.trim())
                         .filter(x => x.length > 0)
                         .map(x => x.toLowerCase()),
-                    isMatch: (0, picomatch_1.default)(pattern, MatchOptions)
+                    isMatch: (0, picomatch_1.default)(pattern, MatchOptions),
                 };
             });
         }
