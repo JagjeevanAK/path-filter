@@ -558,10 +558,7 @@ jobs:
 
 </details>
 
-## See also
-
-- [test-reporter](https://github.com/dorny/test-reporter) - Displays test results from popular testing frameworks directly in GitHub
 
 ## License
 
-The scripts and documentation in this project are released under the [MIT License](https://github.com/dorny/paths-filter/blob/master/LICENSE)
+The scripts and documentation in this project are released under the [MIT License](https://github.com/JagjeevanAK/path-filter/blob/main/LICENSE)
